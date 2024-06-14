@@ -1,2 +1,5 @@
-# identic
-Identity framework for Node.js
+### Run the tests
+
+```
+yarn test
+```
