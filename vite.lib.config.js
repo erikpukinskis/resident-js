@@ -1,5 +1,5 @@
-import path from "path";
-import { defineConfig } from "vite";
+import path from "path"
+import { defineConfig } from "vite"
 
 export default defineConfig({
   resolve: {
@@ -15,7 +15,7 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, "lib/index.ts"),
-      name: "Identic",
+      name: "Resident",
       fileName: (format) => `lib.${format}.js`,
     },
 
@@ -30,4 +30,4 @@ export default defineConfig({
       },
     },
   },
-});
+})
