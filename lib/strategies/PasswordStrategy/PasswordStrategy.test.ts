@@ -3,6 +3,10 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 import { PasswordStrategy } from "./PasswordStrategy"
 import { Resident } from "~/Resident"
 
+type Session = {
+  email: string
+}
+
 describe("LocalStrategy", () => {
   beforeAll(() => {
     vi.useFakeTimers()
@@ -13,11 +17,7 @@ describe("LocalStrategy", () => {
     vi.useRealTimers()
   })
 
-  it("sets the session key when the verify function returns true", async () => {
-    type Session = {
-      email: string
-    }
-
+  it("sets the session key when the verify function returns a user", async () => {
     let token: string | undefined
 
     const resident = new Resident<Session>({
@@ -79,5 +79,38 @@ describe("LocalStrategy", () => {
     expect(token).toEqual(
       "resident.v1.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWtAcmVzaWRlbnQuZGV2IiwiaWF0IjoxNzA0MDY3MjAwfQ.y1OOmF3dEbaIPPfRgoP3GgnvelhcjtergD2U2rpvdH8"
     )
+  })
+
+  it("does not set the session token when the authenticate function returns undefined", async () => {
+    const setSessionToken = vi.fn()
+
+    const resident = new Resident<Session>({
+      /**
+       * Note: In real usage, you should generate a secure secret with by running:
+       *
+       *   openssl rand -hex 32
+       */
+      secrets: ["secret"],
+      setSessionToken,
+      getSessionToken() {
+        return null
+      },
+    })
+
+    const passwordStrategy = new PasswordStrategy<Session>({
+      resident,
+      authenticate() {
+        return null
+      },
+    })
+
+    const erik = await passwordStrategy.authenticate({
+      username: "erik",
+      password: "password",
+    })
+
+    expect(erik).toBe(null)
+
+    expect(setSessionToken).not.toHaveBeenCalled()
   })
 })

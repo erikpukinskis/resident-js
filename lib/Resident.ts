@@ -4,7 +4,7 @@ import type { JsonObject } from "./helpers/json"
 type ResidentArgs = {
   secrets: [string] & string[]
   setSessionToken: (id: string) => Promise<void> | void
-  getSessionToken: () => Promise<string> | string
+  getSessionToken: () => Promise<string | null> | string | null
 }
 
 export class Resident<SessionPayload extends JsonObject> {
