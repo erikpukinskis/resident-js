@@ -1,33 +1,33 @@
-// import type { Json } from "./helpers/json"
+import jwt from "jsonwebtoken"
+import type { JsonObject } from "./helpers/json"
 
-import type { Json } from "./helpers/json"
+type ResidentArgs = {
+  secrets: [string] & string[]
+  setSessionToken: (id: string) => Promise<void> | void
+  getSessionToken: () => Promise<string> | string
+}
 
-// export type ResidentStrategy<Args extends any[], UserType extends Json> = {
-//   verify(req: Request, ...args: Args): Promise<UserType>
-// }
+export class Resident<SessionPayload extends JsonObject> {
+  private _args: ResidentArgs
 
-// type StrategyDictionary<
-//   StrategiesType extends string,
-//   ArgsType extends Record<StrategiesType, any[]>,
-//   UserType extends Json
-// > = {
-//   [Key in StrategiesType]: ResidentStrategy<ArgsType[Key], UserType>
-// }
+  constructor(args: ResidentArgs) {
+    this._args = args
+  }
 
-// export class Resident<
-//   Keys extends string,
-//   Args extends Record<Keys, any[]>,
-//   UserType extends Json
-// > {
-//   strategies: StrategyDictionary<Keys, Args, UserType>
+  async authenticate(payload: SessionPayload) {
+    const jwtSignArgs = [
+      payload,
+      this._args.secrets[0],
+      {
+        algorithm: "HS256",
+      },
+    ] as const
 
-//   constructor(strategies: StrategyDictionary<Keys, Args, UserType>) {
-//     this.strategies = strategies
-//   }
+    const token = jwt.sign(...jwtSignArgs)
 
-//   identify<Key extends Keys>(method: Key, ...args: Args[Key]) {}
-// }
+    // // Uncomment to debug token signing issues
+    // console.log("signed", jwtSignArgs, "and got token", token)
 
-export class Resident<UserType extends Json> {
-  async authenticate(user: UserType) {}
+    await this._args.setSessionToken(`resident.v1.${token}`)
+  }
 }
