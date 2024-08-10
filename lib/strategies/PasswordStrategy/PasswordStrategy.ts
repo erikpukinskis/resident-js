@@ -24,7 +24,7 @@ export class PasswordStrategy<SessionPayload extends JsonObject> {
     this._resident = resident
   }
 
-  async authenticate({
+  async authenticateFromPassword({
     username,
     password,
   }: {

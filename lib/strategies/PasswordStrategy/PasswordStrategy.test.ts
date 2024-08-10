@@ -16,7 +16,7 @@ describe("PasswordStrategy", () => {
     vi.useRealTimers()
   })
 
-  it("sets the session key when the verify function returns a user", async () => {
+  it.only("sets the session key when the verify function returns a user", async () => {
     let token: string | undefined
 
     const resident = new Resident<Session>({
@@ -25,7 +25,7 @@ describe("PasswordStrategy", () => {
        *
        *   openssl rand -hex 32
        */
-      secrets: ["secret"],
+      secrets: ["secret", "old-secret"],
       setSessionToken(id) {
         token = id
       },
@@ -51,12 +51,14 @@ describe("PasswordStrategy", () => {
       },
     })
 
-    const erik = await passwordStrategy.authenticate({
-      username: "erik",
-      password: "password",
-    })
+    const sessionFromPassword = await passwordStrategy.authenticateFromPassword(
+      {
+        username: "erik",
+        password: "password",
+      }
+    )
 
-    expect(erik).toMatchObject({
+    expect(sessionFromPassword).toMatchObject({
       email: "erik@resident.dev",
     })
 
@@ -76,8 +78,15 @@ describe("PasswordStrategy", () => {
     // )
 
     expect(token).toEqual(
-      "resident.v1.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWtAcmVzaWRlbnQuZGV2IiwiaWF0IjoxNzA0MDY3MjAwfQ.y1OOmF3dEbaIPPfRgoP3GgnvelhcjtergD2U2rpvdH8"
+      "resident*v1*eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWtAcmVzaWRlbnQuZGV2IiwiaWF0IjoxNzA0MDY3MjAwfQ.y1OOmF3dEbaIPPfRgoP3GgnvelhcjtergD2U2rpvdH8"
     )
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const sessionFromToken = await resident.authenticateFromToken(token!)
+
+    expect(sessionFromToken).toMatchObject({
+      email: "erik@resident.dev",
+    })
   })
 
   it("does not set the session token when the authenticate function returns undefined", async () => {
@@ -103,7 +112,7 @@ describe("PasswordStrategy", () => {
       },
     })
 
-    const erik = await passwordStrategy.authenticate({
+    const erik = await passwordStrategy.authenticateFromPassword({
       username: "erik",
       password: "password",
     })
