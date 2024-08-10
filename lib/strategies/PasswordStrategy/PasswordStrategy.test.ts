@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken"
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 import { PasswordStrategy } from "./PasswordStrategy"
 import { Resident } from "~/Resident"
@@ -7,7 +6,7 @@ type Session = {
   email: string
 }
 
-describe("LocalStrategy", () => {
+describe("PasswordStrategy", () => {
   beforeAll(() => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2024-01-01T00:00:00.000Z"))

@@ -1,7 +1,5 @@
 {
-  "publishConfig": {
-    "@outerframe:registry": "https://npm.pkg.github.com"
-  },
+  "name": "resident",
   "license": "UNLICENSED",
   "main": "./dist/lib.umd.js",
   "module": "./dist/lib.es.js",
@@ -36,14 +34,13 @@
   },
   "scripts": {
     "all": "yarn && yarn build && yarn fix && yarn check:types && yarn test && echo `echo 8J+OiSBEaWQgYWxs | base64 -d`",
-    "auth:registry": "if test -f \".npmrc\"; then echo \"Error: registry auth overwrites .npmrc, delete yours and run this command again\"; elif [ -z \"$NPM_PKG_TOKEN\" ]; then echo \"Error: publishing a package to github requires a personal access token in \\$NPM_PKG_TOKEN\"; else echo \"@outerframe:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=$NPM_PKG_TOKEN\" > .npmrc; fi",
     "build": "rm -rf dist/* && yarn build:lib && yarn build:types",
     "build:lib": "vite build --config vite.lib.config.js --mode development",
     "build:types": "tsc --declaration --emitDeclarationOnly -p tsconfig.dist.json --skipLibCheck && tsc-alias -p tsconfig.json && mv dist/index.d.ts dist/lib.umd.d.ts",
     "check:format": "prettier --check --ignore-path .gitignore .",
     "check:lint": "eslint --ignore-path .gitignore --no-error-on-unmatched-pattern .; if [ $? -eq 0 ]; then echo 8J+OiSBObyBsaW50IGluIHRoaXMgY29kZSEKCg== | base64 -d; else exit 1; fi",
     "check:types": "tsc --noEmit -p tsconfig.json; if [ $? -eq 0 ]; then echo 8J+OiSBUeXBlcyBhcmUgZ29vZCEKCg== | base64 -d; else exit 1; fi",
-    "confgen": "npx confgen@latest @lib dist:lib --name Resident yarn vite vitest eslint prettier git githubActions githubPackage:outerframe codespaces codedocs typescript",
+    "confgen": "npx confgen@latest @lib dist:lib --name Resident yarn vite vitest eslint prettier git githubActions codespaces codedocs typescript",
     "fix": "yarn fix:lint && yarn fix:format",
     "fix:format": "prettier --write --ignore-path .gitignore .",
     "fix:lint": "eslint --ignore-path .gitignore --no-error-on-unmatched-pattern . --fix; if [ $? -eq 0 ]; then echo 8J+OiSBObyBsaW50IGluIHRoaXMgY29kZSEKCg== | base64 -d; else exit 1; fi",
