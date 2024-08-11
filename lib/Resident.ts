@@ -35,21 +35,32 @@ export class Resident<SessionPayload extends JsonObject> {
   }
 
   async authenticateFromToken(token: string) {
-    const { token: unwrappedToken } = unwrapToken(token)
+    const payload = this.decodeToken(token)
 
+    await this._args.setSessionToken(token)
+
+    return payload
+  }
+
+  decodeToken(token: string) {
+    const { token: unwrappedToken } = unwrapToken(token)
     for (const secret of this._args.secrets) {
       try {
         const payload = jwt.verify(unwrappedToken, secret, {
           algorithms: ["HS256"],
         })
 
-        await this._args.setSessionToken(token)
-
         return payload
       } catch (e) {
         continue
       }
     }
+    throw new Error(`Could not verify JWT token: ${token}`)
+  }
+
+  async getSessionPayload() {
+    const token = await this._args.getSessionToken()
+    return token ? this.decodeToken(token) : null
   }
 }
 

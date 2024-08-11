@@ -7,7 +7,7 @@ type Session = {
   email: string
 }
 
-describe("PasswordStrategy (fake timers)", () => {
+describe("PasswordStrategy class (fake timers)", () => {
   beforeAll(() => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2024-01-01T00:00:00.000Z"))
@@ -91,7 +91,7 @@ describe("PasswordStrategy (fake timers)", () => {
   })
 })
 
-describe("PasswordStrategy (real timers)", () => {
+describe("PasswordStrategy class (real timers)", () => {
   it("does not set the session token when the authenticate function returns undefined", async () => {
     const setSessionToken = vi.fn()
 

@@ -5,7 +5,7 @@ import type { Resident } from "~/Resident"
 type AuthenticateFunction<SessionPayload> = (input: {
   username: string
   password: string
-}) => Promise<SessionPayload | null> | SessionPayload | null
+}) => SessionPayload | null | Promise<SessionPayload | null>
 
 type PasswordStrategyArgs<SessionPayload extends JsonObject> = {
   resident: Resident<SessionPayload>
