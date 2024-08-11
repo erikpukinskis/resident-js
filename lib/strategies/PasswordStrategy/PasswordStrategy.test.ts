@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 import { PasswordStrategy } from "./PasswordStrategy"
+import { noop } from "~/helpers/functions"
 import { Resident } from "~/Resident"
 
 type Session = {
@@ -16,7 +17,7 @@ describe("PasswordStrategy", () => {
     vi.useRealTimers()
   })
 
-  it.only("sets the session key when the verify function returns a user", async () => {
+  it("sets the session key when the authenticate function returns a user", async () => {
     let token: string | undefined
 
     const resident = new Resident<Session>({

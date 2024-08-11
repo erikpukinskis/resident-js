@@ -24,11 +24,14 @@ export class Resident<SessionPayload extends JsonObject> {
     ] as const
 
     const token = jwt.sign(...jwtSignArgs)
+    const wrappedToken = wrapToken({ token, version: 1 })
 
     // // Uncomment to debug token signing issues
     // console.log("signed", jwtSignArgs, "and got token", token)
 
-    await this._args.setSessionToken(wrapToken({ token, version: 1 }))
+    await this._args.setSessionToken(wrappedToken)
+
+    return wrappedToken
   }
 
   async authenticateFromToken(token: string) {
