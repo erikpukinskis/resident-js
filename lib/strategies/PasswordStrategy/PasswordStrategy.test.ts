@@ -7,7 +7,7 @@ type Session = {
   email: string
 }
 
-describe("PasswordStrategy", () => {
+describe("PasswordStrategy (fake timers)", () => {
   beforeAll(() => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2024-01-01T00:00:00.000Z"))
@@ -27,8 +27,8 @@ describe("PasswordStrategy", () => {
        *   openssl rand -hex 32
        */
       secrets: ["secret", "old-secret"],
-      setSessionToken(id) {
-        token = id
+      setSessionToken(newToken) {
+        token = newToken
       },
       getSessionToken() {
         if (!token) {
@@ -89,7 +89,9 @@ describe("PasswordStrategy", () => {
       email: "erik@resident.dev",
     })
   })
+})
 
+describe("PasswordStrategy (real timers)", () => {
   it("does not set the session token when the authenticate function returns undefined", async () => {
     const setSessionToken = vi.fn()
 
@@ -122,4 +124,48 @@ describe("PasswordStrategy", () => {
 
     expect(setSessionToken).not.toHaveBeenCalled()
   })
+
+  it("works with an async authenticate function", async () => {
+    const resident = new Resident<Session>({
+      secrets: ["secret", "old-secret"],
+      setSessionToken: noop,
+      getSessionToken: noop,
+    })
+
+    const passwordStrategy = new PasswordStrategy<Session>({
+      resident,
+      async authenticate({ username, password }) {
+        await sleep(1)
+
+        if (username === "erik" && password === "password") {
+          return { email: "erik@resident.dev" }
+        }
+
+        return null
+      },
+    })
+
+    expect(
+      await passwordStrategy.authenticateFromPassword({
+        username: "erik",
+        password: "password",
+      })
+    ).toMatchObject({
+      email: "erik@resident.dev",
+    })
+
+    expect(
+      await passwordStrategy.authenticateFromPassword({
+        username: "erik",
+        password: "pass1234",
+      })
+    ).toEqual(null)
+  })
 })
+
+// From https://gist.github.com/erikpukinskis/c67c8b0a9ac731dec15784911c2cb0b4
+async function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
