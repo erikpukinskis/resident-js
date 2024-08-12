@@ -1,5 +1,6 @@
 {
   "name": "resident",
+  "version": "0.0.0",
   "license": "UNLICENSED",
   "main": "./dist/lib.umd.js",
   "module": "./dist/lib.es.js",
@@ -11,6 +12,10 @@
       "import": "./dist/lib.es.js",
       "require": "./dist/lib.umd.js"
     }
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -47,9 +52,5 @@
     "fix:lint": "eslint --ignore-path .gitignore --no-error-on-unmatched-pattern . --fix; if [ $? -eq 0 ]; then echo 8J+OiSBObyBsaW50IGluIHRoaXMgY29kZSEKCg== | base64 -d; else exit 1; fi",
     "test": "vitest run --config vite.test.config.js",
     "watch:test": "vitest watch --config vite.test.config.js"
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2"
   }
 }

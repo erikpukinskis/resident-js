@@ -1,5 +1,5 @@
-import path from "path";
-import { defineConfig } from "vite";
+import path from "path"
+import { defineConfig } from "vite"
 
 export default defineConfig({
   resolve: {
@@ -13,4 +13,4 @@ export default defineConfig({
   build: {
     rollupOptions: {},
   },
-});
+})

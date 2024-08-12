@@ -6,5 +6,5 @@
     "rohit-gohri.format-code-action",
     "esbenp.prettier-vscode"
   ],
-  "postCreateCommand": "yarn && yarn auth:registry"
+  "postCreateCommand": "yarn"
 }
