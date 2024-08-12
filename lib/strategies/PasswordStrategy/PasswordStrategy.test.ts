@@ -80,6 +80,22 @@ describe("PasswordStrategy class (fake timers)", () => {
       email: "erik@resident.dev",
     })
   })
+
+  it("generates salts and hashes", async () => {
+    const salt1 = await PasswordStrategy.generateSalt()
+    const salt2 = await PasswordStrategy.generateSalt()
+
+    expect(salt1).toHaveLength(29)
+    expect(salt2).not.toEqual(salt1)
+
+    const hash = await PasswordStrategy.hashPassword(
+      "abcd9876",
+      "$2b$10$mR0e/Jsr1Ih6t8lKgbnZ/e"
+    )
+    expect(hash).toEqual(
+      "$2b$10$mR0e/Jsr1Ih6t8lKgbnZ/eUriHXzuzyx/trI10wYnjQlTv6CiuajK"
+    )
+  })
 })
 
 describe("PasswordStrategy class (real timers)", () => {

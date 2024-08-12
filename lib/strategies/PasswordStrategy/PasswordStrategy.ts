@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt"
 import type { JsonObject } from "~/helpers/json"
 import type { Resident } from "~/Resident"
 // import type { ResidentStrategy } from "~/Resident"
@@ -22,6 +23,30 @@ export class PasswordStrategy<SessionPayload extends JsonObject> {
   }: PasswordStrategyArgs<SessionPayload>) {
     this._authenticate = authenticate
     this._resident = resident
+  }
+
+  /**
+   * Generates a one-way hash for the provided string, with the provided salt.
+   */
+  static hashPassword(text: string, salt: string) {
+    return new Promise<string>((resolve, reject) => {
+      bcrypt.hash(text, salt, function (err, hash) {
+        if (err) return reject(err)
+        resolve(hash)
+      })
+    })
+  }
+
+  /**
+   * Generates a fresh salt
+   */
+  static generateSalt() {
+    return new Promise<string>((resolve, reject) => {
+      bcrypt.genSalt(10, function (err, salt) {
+        if (err) return reject(err)
+        resolve(salt)
+      })
+    })
   }
 
   async authenticateFromPassword({
