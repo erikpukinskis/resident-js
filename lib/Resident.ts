@@ -73,7 +73,7 @@ type ResidentArgs = {
  */
 export class Resident<SessionPayload extends JsonObject> {
   private _args: ResidentArgs
-  private _token: string | undefined
+  private _token: string | null = null
 
   constructor(args: ResidentArgs) {
     this._args = args
@@ -120,6 +120,18 @@ export class Resident<SessionPayload extends JsonObject> {
   }
 
   /**
+   * Returns the SessionPayload for the current session, if there is one.
+   */
+  getSessionPayload() {
+    return this._token ? this.decodeToken(this._token) : null
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async signOut() {
+    this._token = null
+  }
+
+  /**
    * Decodes a token into a SessionPayload without modifying the session state
    * at all.
    *
@@ -139,13 +151,6 @@ export class Resident<SessionPayload extends JsonObject> {
       }
     }
     throw new Error(`Could not verify JWT token: ${token}`)
-  }
-
-  /**
-   * Returns the SessionPayload for the current session, if there is one.
-   */
-  getSessionPayload() {
-    return this._token ? this.decodeToken(this._token) : null
   }
 
   /**

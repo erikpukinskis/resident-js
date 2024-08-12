@@ -55,5 +55,22 @@ describe("Resident class", () => {
     })
   })
 
-  it("signs out", async () => {})
+  it("signs out", async () => {
+    const resident = new Resident<Session>({
+      secrets: ["secret"],
+      onSession: noop,
+    })
+
+    await resident.authenticate({
+      email: "one@example.com",
+    })
+
+    expect(resident.getSessionPayload()).toMatchObject({
+      email: "one@example.com",
+    })
+
+    await resident.signOut()
+
+    expect(resident.getSessionPayload()).toBeNull()
+  })
 })
