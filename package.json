@@ -36,6 +36,7 @@
     "tsc-alias": "^1.8.10",
     "typescript": "4.9.4",
     "vite": "^5.3.1",
+    "vite-plugin-commonjs-externals": "^0.1.4",
     "vitest": "^1.6.0"
   },
   "scripts": {
@@ -46,7 +47,7 @@
     "check:format": "prettier --check --ignore-path .gitignore .",
     "check:lint": "eslint --ignore-path .gitignore --no-error-on-unmatched-pattern .; if [ $? -eq 0 ]; then echo 8J+OiSBObyBsaW50IGluIHRoaXMgY29kZSEKCg== | base64 -d; else exit 1; fi",
     "check:types": "tsc --noEmit -p tsconfig.json; if [ $? -eq 0 ]; then echo 8J+OiSBUeXBlcyBhcmUgZ29vZCEKCg== | base64 -d; else exit 1; fi",
-    "confgen": "npx confgen@latest @lib dist:lib --name Resident yarn vite vitest eslint prettier git githubActions codespaces codedocs typescript",
+    "confgen": "npx confgen@latest @lib dist:lib --name Resident yarn vite vitest eslint prettier git githubActions codespaces codedocs typescript node:crypto",
     "fix": "yarn fix:lint && yarn fix:format",
     "fix:format": "prettier --write --ignore-path .gitignore .",
     "fix:lint": "eslint --ignore-path .gitignore --no-error-on-unmatched-pattern . --fix; if [ $? -eq 0 ]; then echo 8J+OiSBObyBsaW50IGluIHRoaXMgY29kZSEKCg== | base64 -d; else exit 1; fi",
