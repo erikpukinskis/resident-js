@@ -27,17 +27,8 @@ describe("PasswordStrategy class (fake timers)", () => {
        *   openssl rand -hex 32
        */
       secrets: ["secret", "old-secret"],
-      setSessionToken(newToken) {
+      onSession(newToken) {
         token = newToken
-      },
-      getSessionToken() {
-        if (!token) {
-          throw new Error(
-            "Expected sessionId to have been set somewhere in PasswordStrategy.test.ts?"
-          )
-        }
-
-        return token
       },
     })
 
@@ -102,10 +93,7 @@ describe("PasswordStrategy class (real timers)", () => {
        *   openssl rand -hex 32
        */
       secrets: ["secret"],
-      setSessionToken,
-      getSessionToken() {
-        return null
-      },
+      onSession: setSessionToken,
     })
 
     const passwordStrategy = new PasswordStrategy<Session>({
@@ -128,8 +116,7 @@ describe("PasswordStrategy class (real timers)", () => {
   it("works with an async authenticate function", async () => {
     const resident = new Resident<Session>({
       secrets: ["secret", "old-secret"],
-      setSessionToken: noop,
-      getSessionToken: noop,
+      onSession: noop,
     })
 
     const passwordStrategy = new PasswordStrategy<Session>({
