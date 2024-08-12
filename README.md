@@ -208,3 +208,21 @@ Then in your application folder:
 ```
 yalc add resident
 ```
+
+### Todo
+
+Top authentication strategies:
+
+- [ ] [Google Sign-In](https://developers.google.com/identity/sign-in/web/sign-in)
+- [ ] Email magic link
+- [ ] [Login with Github](https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-login-with-github-button-with-a-github-app)
+
+Features
+
+- [ ] Password reset link
+
+Later
+
+- [ ] [Facebook Login for the Web](https://developers.facebook.com/docs/facebook-login/web/)
+- [ ] [Sign in with Apple](https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_js/configuring_your_webpage_for_sign_in_with_apple)
+- [ ] [Azure ActiveDirectory](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-web-app-nodejs-msal-sign-in)
