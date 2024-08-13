@@ -1,6 +1,6 @@
-name: lint
+name: check:lint
 jobs:
-  check:
+  check-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out

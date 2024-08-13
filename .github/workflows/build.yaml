@@ -1,6 +1,6 @@
-name: test
+name: build
 jobs:
-  unit-tests:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -12,8 +12,7 @@ jobs:
           cache: yarn
       - run: yarn install --frozen-lockfile
       - run: yarn build
-      - run: yarn test
 concurrency:
-  group: run-unit-tests
+  group: check-types
   cancel-in-progress: true
 on: push
