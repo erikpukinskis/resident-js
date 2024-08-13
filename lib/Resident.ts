@@ -112,8 +112,16 @@ export class Resident<SessionPayload extends JsonObject> {
    * Throws errors if the token is invalid.
    */
   async authenticateFromToken(token: string) {
+    if (typeof token !== "string") {
+      return null
+    }
+
     const payload = this.decodeToken(token)
 
+    // TODO(erik): Do we really want to fire this off? If we are already
+    // receiving the token from the outside, it's maybe (probably?) not
+    // necessary to set it again. This has the effect of firing res.cookie(...)
+    // on every request, which is not really necessary.
     await this.setSessionToken(token)
 
     return payload
