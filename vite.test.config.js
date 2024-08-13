@@ -1,5 +1,6 @@
-import path from "path";
-import { defineConfig } from "vite";
+import path from "path"
+import { defineConfig } from "vite"
+import commonjsExternals from "vite-plugin-commonjs-externals"
 
 export default defineConfig({
   resolve: {
@@ -8,9 +9,9 @@ export default defineConfig({
     },
   },
 
-  plugins: [],
+  plugins: [commonjsExternals({ "externals": ["crypto"] })],
 
   build: {
     rollupOptions: {},
   },
-});
+})

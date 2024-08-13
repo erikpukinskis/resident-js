@@ -1,6 +1,6 @@
-name: docs site
+name: check:format
 jobs:
-  build:
+  check-format:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -8,17 +8,11 @@ jobs:
       - name: Set up Yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
           cache: yarn
       - run: yarn install --frozen-lockfile
-      - name: Build Codedocs
-        run: yarn build
-      - name: Build site
-        run: yarn build:docs
+      - run: yarn check:format
 concurrency:
-  group: build-docs-site
+  group: check-code-format
   cancel-in-progress: true
-on:
-  push:
-    branches-ignore:
-      - main
+on: push

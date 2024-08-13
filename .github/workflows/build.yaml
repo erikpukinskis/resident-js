@@ -1,6 +1,6 @@
-name: code format
+name: build
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -8,11 +8,11 @@ jobs:
       - name: Set up Yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
           cache: yarn
       - run: yarn install --frozen-lockfile
-      - run: yarn check:format
+      - run: yarn build
 concurrency:
-  group: check-code-format
+  group: check-types
   cancel-in-progress: true
 on: push
