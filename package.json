@@ -1,6 +1,6 @@
 {
   "name": "resident",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "UNLICENSED",
   "main": "./dist/lib.umd.js",
   "module": "./dist/lib.es.js",
