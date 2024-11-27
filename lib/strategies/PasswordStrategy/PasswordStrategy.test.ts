@@ -17,8 +17,8 @@ describe("PasswordStrategy class (fake timers)", () => {
     vi.useRealTimers()
   })
 
-  it("sets the session key when the authenticate function returns a user", async () => {
-    let token: string | undefined
+  it.only("sets the session token when the authenticate function returns a user, pulls the session data out of the token, and signs out", async () => {
+    let token: string | null = null
 
     const resident = new Resident<Session>({
       /**
@@ -79,6 +79,12 @@ describe("PasswordStrategy class (fake timers)", () => {
     expect(sessionFromToken).toMatchObject({
       email: "erik@resident.dev",
     })
+
+    expect(token).not.toBe(null)
+
+    await resident.signOut()
+
+    expect(token).toBe(null)
   })
 
   it("generates salts and hashes", async () => {

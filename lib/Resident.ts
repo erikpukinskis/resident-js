@@ -21,7 +21,7 @@ type ResidentArgs = {
    *         res.cookie("session", token)
    *       }
    */
-  onSession: (token: string) => Promise<void> | void
+  onSession: (token: string | null) => Promise<void> | void
 }
 
 /**
@@ -136,7 +136,7 @@ export class Resident<SessionPayload extends JsonObject> {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   async signOut() {
-    this._token = null
+    await this.setSessionToken(null)
   }
 
   /**
@@ -166,22 +166,33 @@ export class Resident<SessionPayload extends JsonObject> {
    * but seems good to have a centralized place to do this every time, in case
    * it needs to change over time a bit.
    */
-  private async setSessionToken(token: string) {
+  private async setSessionToken(token: string | null) {
     await this._args.onSession(token)
     this._token = token
   }
 }
 
+/**
+ * Adds a small wrapper around a JWT so that it can be 1) recognized as a
+ * resident token, and 2) versioned.
+ *
+ * For example, presuming you passed "abc123" and that was a valid JWT token,
+ * wrapping it with version 4 would return "resident*v4*abc123"
+ */
 function wrapToken({ token, version }: { token: string; version: number }) {
   return `resident*v${version}*${token}`
 }
 
+/**
+ * Removes the prefix and version from a Resident token.
+ * @returns a raw JWT
+ */
 function unwrapToken(wrappedToken: string) {
   const match = wrappedToken.match(/^resident\*v([0-9]+)\*(.+)$/)
 
   if (!match) {
     throw new Error(
-      `Token is not a valid resident session token. Must match the format "resident*v[version]*[jwt]": ${wrappedToken}`
+      `Token is not a valid resident session token. Must match the format "resident*v[version]*[jwt]". Received "${wrappedToken}"`
     )
   }
 
