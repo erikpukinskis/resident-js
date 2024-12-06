@@ -13,6 +13,6 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn build
 concurrency:
-  group: check-types
+  group: build
   cancel-in-progress: true
 on: push
