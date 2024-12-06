@@ -111,7 +111,7 @@ export class Resident<SessionPayload extends JsonObject> {
    *
    * Throws errors if the token is invalid.
    */
-  async authenticateFromToken(token: string) {
+  async authenticateFromToken(token: string | null | undefined) {
     if (typeof token !== "string") {
       return null
     }

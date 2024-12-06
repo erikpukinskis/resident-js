@@ -17,7 +17,7 @@ describe("PasswordStrategy class (fake timers)", () => {
     vi.useRealTimers()
   })
 
-  it.only("sets the session token when the authenticate function returns a user, pulls the session data out of the token, and signs out", async () => {
+  it("sets the session token when the authenticate function returns a user, pulls the session data out of the token, and signs out", async () => {
     let token: string | null = null
 
     const resident = new Resident<Session>({
@@ -73,8 +73,7 @@ describe("PasswordStrategy class (fake timers)", () => {
       "resident*v1*eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWtAcmVzaWRlbnQuZGV2IiwiaWF0IjoxNzA0MDY3MjAwfQ.y1OOmF3dEbaIPPfRgoP3GgnvelhcjtergD2U2rpvdH8"
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const sessionFromToken = await resident.authenticateFromToken(token!)
+    const sessionFromToken = await resident.authenticateFromToken(token)
 
     expect(sessionFromToken).toMatchObject({
       email: "erik@resident.dev",
